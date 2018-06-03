@@ -1,0 +1,68 @@
+-- This Source Code Form is subject to the terms of the Mozilla Public
+-- License, v. 2.0.  If a copy of the MPL was not distributed with this
+-- file, You can obtain one at http://mozilla.org/MPL/2.0/.
+--
+-- Copyright 1997 - July 2008 CWI, August 2008 - 2017 MonetDB B.V.
+
+-- (co) Arjen de Rijke, Bart Scheers
+-- Use statistical functions from gsl library
+
+divert(`-1')
+define(`FUNCTION0',`-- $1
+create function sys.$2()
+returns double external name gsl."$2";
+')
+define(`FUNCTION1',`-- $1
+create function sys.$2($4 $3)
+returns double external name gsl."$2";
+')
+define(`FUNCTION2',`-- $1
+create function sys.$2($4 $3, $6 $5)
+returns double external name gsl."$2";
+')
+define(`FUNCTION3',`-- $1
+create function sys.$2($4 $3, $6 $5, $8 $7)
+returns double external name gsl."$2";
+')
+define(`FUNCTION4',`-- $1
+create function sys.$2($4 $3, $6 $5, $8 $7, $10 $9)
+returns double external name gsl."$2";
+')
+define(`FUNCTION5',`-- $1
+create function sys.$2($4 $3, $6 $5, $8 $7, $10 $9, $12 $11)
+returns double external name gsl."$2";
+')
+define(`FUNCTION6',`-- $1
+create function sys.$2($4 $3, $6 $5, $8 $7, $10 $9, $12 $11, $14 $13)
+returns double external name gsl."$2";
+')
+
+define(`DIST1FUNCTION',`-- $1 distribution
+  FUNCTION2($1 probability density function,gsl_ran_$2_pdf,double,x,double,$3)
+  FUNCTION2($1 cumulative density function,gsl_cdf_$2_P,double,x,double,$3)
+  FUNCTION2($1 survival function,gsl_cdf_$2_Q,double,x,double,$3)			
+  FUNCTION2($1 quantile function,gsl_cdf_$2_Pinv,double,x,double,$3)			
+  FUNCTION2($1 upper quantile function,gsl_cdf_$2_Qinv,double,x,double,$3)
+')
+define(`DIST2FUNCTION',`-- $1 distribution
+  FUNCTION3($1 probability density function,gsl_ran_$2_pdf,double,x,double,$3,double,$4)
+  FUNCTION3($1 cumulative density function,gsl_cdf_$2_P,double,x,double,$3,double,$4)
+  FUNCTION3($1 survival function,gsl_cdf_$2_Q,double,x,double,$3,double,$4)			
+  FUNCTION3($1 quantile function,gsl_cdf_$2_Pinv,double,x,double,$3,double,$4)			
+  FUNCTION3($1 upper quantile function,gsl_cdf_$2_Qinv,double,x,double,$3,double,$4)
+')
+define(`DIST3FUNCTION',`-- $1 distribution
+  FUNCTION4($1 probability density function,gsl_ran_$2_pdf,double,x,double,$3,double,$4,double,$5)
+  FUNCTION4($1 cumulative density function,gsl_cdf_$2_P,double,x,double,$3,double,$4,double,$5)
+  FUNCTION4($1 survival function,gsl_cdf_$2_Q,double,x,double,$3,double,$4,double,$5)			
+  FUNCTION4($1 quantile function,gsl_cdf_$2_Pinv,double,x,double,$3,double,$4,double,$5)			
+  FUNCTION4($1 upper quantile function,gsl_cdf_$2_Qinv,double,x,double,$3,double,$4,double,$5)
+')
+
+divert(`1')
+
+DIST1FUNCTION(chi-squared,chisq,nu)
+DIST2FUNCTION(Gamma,gamma,a,b)
+FUNCTION3(Exact Poisson confidence interval,poisson_ci,double,x,integer,boundary,double,conflevel)
+create function sys.poisson_ci(x double, boundary integer)
+returns double begin return sys.poisson_ci(x,boundary,0.95); end;
