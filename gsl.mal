@@ -3,22 +3,155 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright 1997 - July 2008 CWI, August 2008 - 2017 MonetDB B.V.
+# Copyright 2018 Mark Clements
 
 module gsl;
 module batgsl;
 
-command gsl.chi2prob(d:dbl,i:dbl):dbl
-address GSLchisqProb
-comment "Chi Squared probability";
 
-command batgsl.chi2prob(d:bat[:dbl],i:dbl):bat[:dbl]
-address GSLbat_chisqProb_cst
-comment "Chi Squared probability";
+# Chi-squared distribution
+  command gsl.gsl_ran_chisq_pdf(x:dbl,nu:dbl):dbl
+  address gsl_gsl_ran_chisq_pdf
+  comment "Chi-squared probability density function";
+command batgsl.gsl_ran_chisq_pdf(x:bat[:dbl],nu:dbl):bat[:dbl]
+  address bat_gsl_gsl_ran_chisq_pdf
+  comment "Chi-squared probability density function";
+command batgsl.gsl_ran_chisq_pdf(x:bat[:dbl],nu:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_ran_chisq_pdf
+  comment "Chi-squared probability density function";
 
-command batgsl.chi2prob(d:dbl,i:bat[:dbl]):bat[:dbl]
-address GSLcst_chisqProb_bat
-comment "Chi Squared probability";
+  command gsl.gsl_cdf_chisq_P(x:dbl,nu:dbl):dbl
+  address gsl_gsl_cdf_chisq_P
+  comment "Chi-squared cumulative density function";
+command batgsl.gsl_cdf_chisq_P(x:bat[:dbl],nu:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_chisq_P
+  comment "Chi-squared cumulative density function";
+command batgsl.gsl_cdf_chisq_P(x:bat[:dbl],nu:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_chisq_P
+  comment "Chi-squared cumulative density function";
 
-command batgsl.chi2prob(d:bat[:dbl],i:bat[:dbl]):bat[:dbl]
-address GSLbat_chisqProb_bat
-comment "Chi Squared probability";
+  command gsl.gsl_cdf_chisq_Q(x:dbl,nu:dbl):dbl
+  address gsl_gsl_cdf_chisq_Q
+  comment "Chi-squared survival function";
+command batgsl.gsl_cdf_chisq_Q(x:bat[:dbl],nu:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_chisq_Q
+  comment "Chi-squared survival function";
+command batgsl.gsl_cdf_chisq_Q(x:bat[:dbl],nu:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_chisq_Q
+  comment "Chi-squared survival function";
+			
+  command gsl.gsl_cdf_chisq_Pinv(x:dbl,nu:dbl):dbl
+  address gsl_gsl_cdf_chisq_Pinv
+  comment "Chi-squared quantile function";
+command batgsl.gsl_cdf_chisq_Pinv(x:bat[:dbl],nu:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_chisq_Pinv
+  comment "Chi-squared quantile function";
+command batgsl.gsl_cdf_chisq_Pinv(x:bat[:dbl],nu:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_chisq_Pinv
+  comment "Chi-squared quantile function";
+			
+  command gsl.gsl_cdf_chisq_Qinv(x:dbl,nu:dbl):dbl
+  address gsl_gsl_cdf_chisq_Qinv
+  comment "Chi-squared upper quantile function";
+command batgsl.gsl_cdf_chisq_Qinv(x:bat[:dbl],nu:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_chisq_Qinv
+  comment "Chi-squared upper quantile function";
+command batgsl.gsl_cdf_chisq_Qinv(x:bat[:dbl],nu:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_chisq_Qinv
+  comment "Chi-squared upper quantile function";
+
+
+# Gamma distribution
+  command gsl.gsl_ran_gamma_pdf(x:dbl,a:dbl,b:dbl):dbl
+  address gsl_gsl_ran_gamma_pdf
+  comment "Gamma probability density function";
+command batgsl.gsl_ran_gamma_pdf(x:bat[:dbl],a:dbl,b:dbl):bat[:dbl]
+  address bat_gsl_gsl_ran_gamma_pdf
+  comment "Gamma probability density function";
+command batgsl.gsl_ran_gamma_pdf(x:bat[:dbl],a:bat[:dbl],b:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_ran_gamma_pdf
+  comment "Gamma probability density function";
+function batgsl.gsl_ran_gamma_pdf(x:bat[:dbl],a:bat[:dbl],b:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,b:dbl);
+  out:bat[:dbl] := batgsl.gsl_ran_gamma_pdf(x,a,third);
+  return out;
+end;
+
+  command gsl.gsl_cdf_gamma_P(x:dbl,a:dbl,b:dbl):dbl
+  address gsl_gsl_cdf_gamma_P
+  comment "Gamma cumulative density function";
+command batgsl.gsl_cdf_gamma_P(x:bat[:dbl],a:dbl,b:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_gamma_P
+  comment "Gamma cumulative density function";
+command batgsl.gsl_cdf_gamma_P(x:bat[:dbl],a:bat[:dbl],b:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_gamma_P
+  comment "Gamma cumulative density function";
+function batgsl.gsl_cdf_gamma_P(x:bat[:dbl],a:bat[:dbl],b:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,b:dbl);
+  out:bat[:dbl] := batgsl.gsl_cdf_gamma_P(x,a,third);
+  return out;
+end;
+
+  command gsl.gsl_cdf_gamma_Q(x:dbl,a:dbl,b:dbl):dbl
+  address gsl_gsl_cdf_gamma_Q
+  comment "Gamma survival function";
+command batgsl.gsl_cdf_gamma_Q(x:bat[:dbl],a:dbl,b:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_gamma_Q
+  comment "Gamma survival function";
+command batgsl.gsl_cdf_gamma_Q(x:bat[:dbl],a:bat[:dbl],b:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_gamma_Q
+  comment "Gamma survival function";
+function batgsl.gsl_cdf_gamma_Q(x:bat[:dbl],a:bat[:dbl],b:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,b:dbl);
+  out:bat[:dbl] := batgsl.gsl_cdf_gamma_Q(x,a,third);
+  return out;
+end;
+			
+  command gsl.gsl_cdf_gamma_Pinv(x:dbl,a:dbl,b:dbl):dbl
+  address gsl_gsl_cdf_gamma_Pinv
+  comment "Gamma quantile function";
+command batgsl.gsl_cdf_gamma_Pinv(x:bat[:dbl],a:dbl,b:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_gamma_Pinv
+  comment "Gamma quantile function";
+command batgsl.gsl_cdf_gamma_Pinv(x:bat[:dbl],a:bat[:dbl],b:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_gamma_Pinv
+  comment "Gamma quantile function";
+function batgsl.gsl_cdf_gamma_Pinv(x:bat[:dbl],a:bat[:dbl],b:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,b:dbl);
+  out:bat[:dbl] := batgsl.gsl_cdf_gamma_Pinv(x,a,third);
+  return out;
+end;
+			
+  command gsl.gsl_cdf_gamma_Qinv(x:dbl,a:dbl,b:dbl):dbl
+  address gsl_gsl_cdf_gamma_Qinv
+  comment "Gamma upper quantile function";
+command batgsl.gsl_cdf_gamma_Qinv(x:bat[:dbl],a:dbl,b:dbl):bat[:dbl]
+  address bat_gsl_gsl_cdf_gamma_Qinv
+  comment "Gamma upper quantile function";
+command batgsl.gsl_cdf_gamma_Qinv(x:bat[:dbl],a:bat[:dbl],b:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_gsl_cdf_gamma_Qinv
+  comment "Gamma upper quantile function";
+function batgsl.gsl_cdf_gamma_Qinv(x:bat[:dbl],a:bat[:dbl],b:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,b:dbl);
+  out:bat[:dbl] := batgsl.gsl_cdf_gamma_Qinv(x,a,third);
+  return out;
+end;
+
+
+
+command gsl.poisson_ci(x:dbl,boundary:int,conflevel:dbl):dbl
+  address gsl_poisson_ci
+  comment "Exact Poisson confidence interval";
+command batgsl.poisson_ci(x:bat[:dbl],boundary:int,conflevel:dbl):bat[:dbl]
+  address bat_gsl_poisson_ci
+  comment "Exact Poisson confidence interval";
+command batgsl.poisson_ci(x:bat[:dbl],boundary:bat[:int],conflevel:bat[:dbl]):bat[:dbl]
+  address bat_gsl_bats_poisson_ci
+  comment "Exact Poisson confidence interval";
+function batgsl.poisson_ci(x:bat[:dbl],boundary:bat[:int],conflevel:dbl):bat[:dbl];
+  third:bat[:dbl] := algebra.project(x,conflevel:dbl);
+  out:bat[:dbl] := batgsl.poisson_ci(x,boundary,third);
+  return out;
+end;
+
+
