@@ -1,0 +1,9 @@
+lib_gsl.la
+lib_gsl.so
+gsl.o
+*~
+.monetdb
+gsl.mal
+??_gsl.sql
+README.html
+temp
